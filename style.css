@@ -32,13 +32,13 @@ h1 {
 }
 
 .tab-buttons button.active {
-    background-color: #2196F3;
+    background-color: #8fffe7;
 }
 
 .tab-content {
     display: none;
     padding: 20px;
-    border-top: 2px solid #2196F3;
+    border-top: 2px solid #8fffe7;
     animation: fadeIn 0.3s ease-in;
 }
 
