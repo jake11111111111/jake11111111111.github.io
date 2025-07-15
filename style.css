@@ -28,7 +28,7 @@ h1 {
 }
 
 .tab-buttons button:hover {
-    background-color: #575757;
+    background-color: #8fffe7; /* 575757 */
 }
 
 .tab-buttons button.active {
