@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Movie Spinner Wheel</title>
   <style>
     body {
@@ -16,6 +16,10 @@
     canvas {
       border: 4px solid #444;
       border-radius: 50%;
+      /* Make sure canvas display size matches resolution */
+      width: 400px;
+      height: 400px;
+      display: block;
     }
     #arrow {
       width: 0;
@@ -38,7 +42,7 @@
 <body>
 
   <h1>🎬 Movie Spinner Wheel 🎡</h1>
-  <input type="text" id="movieInput" placeholder="Enter movie name">
+  <input type="text" id="movieInput" placeholder="Enter movie name" />
   <button onclick="addMovie()">Add Movie</button>
   <button onclick="spinWheel()">Spin!</button>
   <button onclick="clearMovies()">Clear List</button>
@@ -56,10 +60,10 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <script>
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-    const spinSound = document.getElementById('spinSound');
-    let movies = JSON.parse(localStorage.getItem('movies')) || [];
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+    const spinSound = document.getElementById("spinSound");
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     let angle = 0;
     let spinning = false;
     let selectedIndex = -1;
@@ -67,36 +71,42 @@
     function drawWheel() {
       const total = movies.length;
       const radius = canvas.width / 2;
+
+      // Clear entire canvas before drawing
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (total === 0) {
         ctx.font = "20px Arial";
         ctx.textAlign = "center";
+        ctx.fillStyle = "#000";
         ctx.fillText("Add some movies!", radius, radius);
         return;
       }
 
       for (let i = 0; i < total; i++) {
-        const start = angle + (i * 2 * Math.PI / total);
-        const end = angle + ((i + 1) * 2 * Math.PI / total);
+        const start = angle + (i * 2 * Math.PI) / total;
+        const end = angle + ((i + 1) * 2 * Math.PI) / total;
 
+        ctx.beginPath(); // Start fresh path for each slice
+        ctx.moveTo(radius, radius);
+        ctx.arc(radius, radius, radius, start, end);
+        ctx.closePath();
+
+        // Highlight selected slice with gold color and thicker border
         if (i === selectedIndex) {
-          ctx.fillStyle = "#FFD700"; // highlight
-          ctx.strokeStyle = "#000";
-          ctx.lineWidth = 5;
+          ctx.fillStyle = "#FFD700"; // Gold
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 4;
         } else {
-          ctx.fillStyle = `hsl(${i * 360 / total}, 70%, 60%)`;
+          ctx.fillStyle = `hsl(${(i * 360) / total}, 70%, 60%)`;
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 1;
         }
 
-        ctx.beginPath();
-        ctx.moveTo(radius, radius);
-        ctx.arc(radius, radius, radius, start, end);
-        ctx.closePath();
         ctx.fill();
         ctx.stroke();
 
+        // Draw movie text label
         ctx.save();
         ctx.translate(radius, radius);
         ctx.rotate(start + (end - start) / 2);
@@ -109,12 +119,12 @@
     }
 
     function addMovie() {
-      const input = document.getElementById('movieInput');
+      const input = document.getElementById("movieInput");
       const movie = input.value.trim();
       if (movie) {
         movies.push(movie);
-        localStorage.setItem('movies', JSON.stringify(movies));
-        input.value = '';
+        localStorage.setItem("movies", JSON.stringify(movies));
+        input.value = "";
         drawWheel();
       }
     }
@@ -123,28 +133,31 @@
       if (confirm("Clear all movies?")) {
         movies = [];
         selectedIndex = -1;
-        localStorage.removeItem('movies');
-        document.getElementById('selectedMovie').innerText = '';
+        localStorage.removeItem("movies");
+        document.getElementById("selectedMovie").innerText = "";
         drawWheel();
       }
     }
 
     function resetSpinner() {
       selectedIndex = -1;
-      document.getElementById('selectedMovie').innerText = '';
+      document.getElementById("selectedMovie").innerText = "";
       drawWheel();
     }
 
     function vetoMovie() {
       if (selectedIndex !== -1 && movies.length > 1) {
         const removedMovie = movies.splice(selectedIndex, 1)[0];
-        localStorage.setItem('movies', JSON.stringify(movies));
+        localStorage.setItem("movies", JSON.stringify(movies));
         selectedIndex = -1;
-        document.getElementById('selectedMovie').innerText = `❌ Vetoed "${removedMovie}" — Spinning again...`;
+        document.getElementById(
+          "selectedMovie"
+        ).innerText = `❌ Vetoed "${removedMovie}" — Spinning again...`;
         drawWheel();
         setTimeout(spinWheel, 1000);
       } else if (movies.length === 1) {
-        document.getElementById('selectedMovie').innerText = "Can't veto the last movie!";
+        document.getElementById("selectedMovie").innerText =
+          "Can't veto the last movie!";
       }
     }
 
@@ -152,13 +165,13 @@
       if (spinning || movies.length === 0) return;
       spinning = true;
 
-      let spinAngle = Math.random() * 360 + 720;
+      let spinAngle = Math.random() * 360 + 720; // 2 to 4 spins
       let current = 0;
       const spinSpeed = 5;
 
       const interval = setInterval(() => {
         current += spinSpeed;
-        angle += (spinSpeed * Math.PI / 180);
+        angle += (spinSpeed * Math.PI) / 180;
         drawWheel();
         spinSound.currentTime = 0;
         spinSound.play();
@@ -166,9 +179,13 @@
         if (current >= spinAngle) {
           clearInterval(interval);
           angle = angle % (2 * Math.PI);
-          selectedIndex = Math.floor(((2 * Math.PI - angle) % (2 * Math.PI)) / (2 * Math.PI / movies.length));
+          selectedIndex = Math.floor(
+            ((2 * Math.PI - angle) % (2 * Math.PI)) / ((2 * Math.PI) / movies.length)
+          );
           const selected = movies[selectedIndex];
-          document.getElementById('selectedMovie').innerText = `🎉 Selected: ${selected}`;
+          document.getElementById(
+            "selectedMovie"
+          ).innerText = `🎉 Selected: ${selected}`;
           drawWheel();
           launchConfetti();
           spinning = false;
@@ -180,12 +197,12 @@
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.6 }
+        origin: { y: 0.6 },
       });
     }
 
+    // Initial draw
     drawWheel();
   </script>
-
 </body>
 </html>
