@@ -2,13 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Movie Spinner Wheel</title>
+  <h1 class="title">Movie Spinner</h1>
+
+<style>
+  .title {
+    color: #00c6ff; /* bright blue */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+</style>
+
+
+  
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 0em;
-      background-color: white;            //CHANGE THIS
+      background-color: black;            //CHANGE THIS
       color: white;
     }
     #container {
@@ -56,12 +68,12 @@
     }
 
     //more new stuff we'll see if it works properly
-    .button:hover {
+    button:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(0, 114, 255, 0.4);
   }
 
-  .button:active {
+  button:active {
     transform: scale(0.97);
   }
 
