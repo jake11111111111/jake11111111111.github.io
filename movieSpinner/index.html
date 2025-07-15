@@ -33,7 +33,7 @@
       position: absolute;
       top: 50%;
       left: 100%; /* position right outside canvas */
-      transform: translate(0, 0%);
+      transform: translate(0, -50%);
     }
     input, button {
       margin: 10px;
@@ -80,7 +80,7 @@
       if (total === 0) {
         ctx.font = "20px Arial";
         ctx.textAlign = "center";
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "#a5fc03"; //change this
         ctx.fillText("Add some movies!", radius, radius);
         return;
       }
