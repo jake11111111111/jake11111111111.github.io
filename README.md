@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <h1>My Multi-Tab Website</h1>
+    
 
     <div class="tab-buttons">
         <button class="tab-btn active" onclick="showTab('home')">Home</button>
