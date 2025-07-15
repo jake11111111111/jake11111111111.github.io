@@ -1,8 +1,7 @@
 
 
-
-
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Multi-Tab Website</title>
@@ -11,7 +10,7 @@
             font-family: Arial, sans-serif;
         }
 
-        <!-- Tab button styles -->
+        /* Tab button styles */
         .tab-buttons {
             display: flex;
             background-color: #333;
@@ -35,7 +34,7 @@
             background-color: #2196F3;
         }
 
-        <!-- Tab content styles -->
+        /* Tab content styles */
         .tab-content {
             display: none;
             padding: 20px;
@@ -74,22 +73,22 @@
 
     <script>
         function showTab(tabId) {
-            <!-- Hide all tab contents -->
+            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
 
-            <!-- Remove 'active' from all buttons -->
+            // Remove 'active' from all buttons
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(button => button.classList.remove('active'));
 
-            <!-- Show selected tab and activate button -->
+            // Show selected tab and activate button
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
         }
     </script>
 
 </body>
-
+</html>
 
 
 
