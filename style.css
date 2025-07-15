@@ -13,13 +13,13 @@ h1 {
 .tab-buttons {
     display: flex;
     flex-wrap: wrap;
-    background-color: #8fffe7;
+    background-color: #;
 }
 
 .tab-buttons button {
     flex: 1;
     padding: 14px;
-    background-color: #8fffe7;
+    background-color: #781d1d; /* maroon */
     color: white;
     border: none;
     cursor: pointer;
@@ -28,11 +28,11 @@ h1 {
 }
 
 .tab-buttons button:hover {
-    background-color: #8fffe7; /* 575757 */
+    background-color: #9e2929; /* 575757 */ /* lighter maroon lol */
 }
 
 .tab-buttons button.active {
-    background-color: #8fffe7;
+    background-color: #380b0b; /* dark maroon */
 }
 
 .tab-content {
