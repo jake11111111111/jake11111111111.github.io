@@ -8,7 +8,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 2em;
-      background-color: blue;            //CHANGE THIS
+      background-color: green;            //CHANGE THIS
       color: white;
     }
     #container {
@@ -175,7 +175,7 @@
       if (spinning || movies.length === 0) return;
       spinning = true;
 
-      let spinAngle = Math.random() * 360 + 720;
+      let spinAngle = (Math.random() * 360) + (Math.random() * 360) + 360;
       let current = 0;
       const spinSpeed = 5;
 
@@ -200,7 +200,7 @@
           launchConfetti();
           spinning = false;
         }
-      }, 30);
+      }, 90);
     }
 
     function launchConfetti() {
