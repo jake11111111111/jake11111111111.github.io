@@ -8,7 +8,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 0em;
-      background-color: gray;            //CHANGE THIS
+      background-color: white;            //CHANGE THIS
       color: white;
     }
     #container {
@@ -40,7 +40,21 @@
       margin: 10px;
       padding: 0.5em;
       font-size: 1em;
+
+      //new stuff
+       background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    padding: 12px 28px;
+    margin: 10px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 114, 255, 0.25);
     }
+
+    
   </style>
 </head>
 <body>
@@ -53,10 +67,7 @@
   <button onclick="resetSpinner()">Reset Spinner</button>
   <button onclick="vetoMovie()">❌ Veto & Re-Spin</button>
 
-  <div class="controls">
-  <button class="button" id="spinButton">🎯 Spin</button>
-  <button class="button" id="vetoButton">🚫 Veto</button>
-</div>
+ 
 
   <div id="container">
     <canvas id="wheel" width="400" height="400"></canvas>
