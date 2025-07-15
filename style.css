@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+.tab-buttons {
+    display: flex;
+    background-color: #333;
+}
+
+.tab-buttons button {
+    flex: 1;
+    padding: 14px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tab-buttons button:hover {
+    background-color: #575757;
+}
+
+.tab-buttons button.active {
+    background-color: #2196F3;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.tab-content.active {
+    display: block;
+}
