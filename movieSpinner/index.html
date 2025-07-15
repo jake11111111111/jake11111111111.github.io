@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Spinner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+    #movieList {
+      margin-top: 1em;
+    }
+    #spinner {
+      margin: 2em auto;
+      padding: 1em;
+      border: 4px solid #333;
+      border-radius: 50%;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+      background-color: #f9f9f9;
+    }
+    button {
+      margin: 0.5em;
+    }
+  </style>
+</head>
+<body>
 
+  <h1>🎬 Movie Spinner 🎡</h1>
+
+  <input type="text" id="movieInput" placeholder="Enter movie name" />
+  <button onclick="addMovie()">Add Movie</button>
+  <button onclick="spin()">Spin!</button>
+
+  <div id="movieList"></div>
+  <div id="spinner">🎥</div>
+
+  <!-- Link to external JS file -->
+  <script src="script.js"></script>
+
+</body>
+</html>
