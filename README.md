@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Multi-Tab Website</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
