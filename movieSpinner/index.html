@@ -44,7 +44,7 @@
 </head>
 <body>
 
-  <h1>🎬 Movie Spinner Wheel 🎡</h1>
+  <h1>Movie Spinner</h1>
   <input type="text" id="movieInput" placeholder="Enter movie name" />
   <button onclick="addMovie()">Add Movie</button>
   <button onclick="spinWheel()">Spin!</button>
@@ -186,7 +186,7 @@
           document.getElementById(
             "selectedMovie"
           ).innerText = `🎉 Selected: ${selected}`;
-          drawWheel();
+         <!-- drawWheel(); -->
           launchConfetti();
           spinning = false;
         }
