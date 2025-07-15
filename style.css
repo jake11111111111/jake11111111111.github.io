@@ -1,21 +1,30 @@
 body {
     font-family: Arial, sans-serif;
     background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
 }
 
 .tab-buttons {
     display: flex;
+    flex-wrap: wrap;
     background-color: #333;
 }
 
 .tab-buttons button {
     flex: 1;
-    padding: 14px 20px;
+    padding: 14px;
     background-color: #333;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .tab-buttons button:hover {
@@ -29,9 +38,25 @@ body {
 .tab-content {
     display: none;
     padding: 20px;
-    border: 1px solid #ccc;
+    border-top: 2px solid #2196F3;
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Smooth fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .tab-content.active {
     display: block;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .tab-buttons button {
+        flex: 100%;
+        text-align: center;
+        font-size: 18px;
+    }
 }
