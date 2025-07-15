@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stylish Buttons</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 20px;
+    }
+
+    .button {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(0, 114, 255, 0.5);
+    }
+
+    .button:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="button">🎯 Spin</button>
+  <button class="button">🚫 Veto</button>
+
+</body>
+</html>
