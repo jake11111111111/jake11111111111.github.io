@@ -1,0 +1,29 @@
+<style>
+  .controls {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .button {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    padding: 12px 28px;
+    margin: 10px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 114, 255, 0.25);
+  }
+
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 114, 255, 0.4);
+  }
+
+  .button:active {
+    transform: scale(0.97);
+  }
+</style>
