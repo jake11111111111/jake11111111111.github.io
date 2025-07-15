@@ -12,24 +12,30 @@
     
 
     <div class="tab-buttons">
-        <button class="tab-btn active" onclick="showTab('home')">Home</button>
-        <button class="tab-btn" onclick="showTab('about')">About</button>
+        <button class="tab-btn active" onclick="showTab('about')">About</button>
+        <button class="tab-btn" onclick="showTab('projects')">Projects</button>
         <button class="tab-btn" onclick="showTab('contact')">Contact</button>
     </div>
 
-    <div id="home" class="tab-content active">
-        <h2>Welcome to the Home Page</h2>
-        <p>This is the home tab content.</p>
+<!-- about tab -->
+    <div id="about" class="tab-content active">
+        <h2>About</h2>
+        <p>I am a Computer Science and Mathematics double major focused on developing imaginative solutions to simple and complex problems. I am currently learning web design and neural networks.</p>
     </div>
 
-    <div id="about" class="tab-content">
-        <h2>About Us</h2>
+<!-- projects tab -->
+    <div id="projects" class="tab-content">
+        <h2>Projects</h2>
         <p>This is the about tab content.</p>
     </div>
 
+<!-- contact tab -->
     <div id="contact" class="tab-content">
-        <h2>Contact Information</h2>
-        <p>This is the contact tab content.</p>
+        <h2>Contact</h2>
+        <p>email 2jacob.wood@gmail.com</p>
+        <p>instagram @jakeofohio</p>
+        <p>github jake11111111111</p>
+        
     </div>
 
     <script src="script.js"></script>
