@@ -2,4 +2,4 @@
 Website
 Test
 <a href="html2.html">Visit Example Website</a>
-<img src="https://www.example.com/image.jpg" alt="Description of the image">
+<img src="Screenshot 2023-06-10 145027.png" alt="Yellow cardinal on a branch">
