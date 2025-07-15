@@ -8,7 +8,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 2em;
-      background-color: black;            //CHANGE THIS
+      background-color: white;            //CHANGE THIS
       color: white;
     }
     #container {
@@ -72,12 +72,12 @@
     let spinning = false;
     let selectedIndex = -1;
 
-    function drawWheel() {
+   function drawWheel() {
   const total = movies.length;
   const radius = canvas.width / 2;
 
-  // Full canvas clear
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any transforms
+  // Reset everything
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (total === 0) {
@@ -88,40 +88,44 @@
     return;
   }
 
+  // Move canvas origin to center (critical!)
+  ctx.save();
+  ctx.translate(radius, radius); // Center the origin
+
   for (let i = 0; i < total; i++) {
     const start = angle + (i * 2 * Math.PI) / total;
     const end = angle + ((i + 1) * 2 * Math.PI) / total;
 
     ctx.beginPath();
-    ctx.moveTo(radius, radius);
-    ctx.arc(radius, radius, radius - 2, start, end); // Shrink radius slightly
+    ctx.moveTo(0, 0); // Now (0,0) is the center of the canvas
+    ctx.arc(0, 0, radius, start, end);
     ctx.closePath();
 
-    // Fill and stroke styles
-    if (i === selectedIndex && !spinning) {
-      ctx.fillStyle = "#fff";
-      ctx.strokeStyle = "#000"; // Make stroke match background to reduce visual pop
-      ctx.lineWidth = 2;
-    } else {
-      ctx.fillStyle = `hsl(${(i * 360) / total}, 70%, 60%)`;
-      ctx.strokeStyle = "transparent"; // Remove stroke to prevent "circle"
-      ctx.lineWidth = 0;
-    }
+    ctx.fillStyle = i === selectedIndex && !spinning
+      ? "#FFD700"
+      : `hsl(${(i * 360) / total}, 70%, 60%)`;
 
     ctx.fill();
-    if (ctx.lineWidth > 0) ctx.stroke();
+  }
 
-    // Draw text
+  // Draw movie labels
+  for (let i = 0; i < total; i++) {
+    const start = angle + (i * 2 * Math.PI) / total;
+    const end = angle + ((i + 1) * 2 * Math.PI) / total;
+    const midAngle = start + (end - start) / 2;
+
     ctx.save();
-    ctx.translate(radius, radius);
-    ctx.rotate(start + (end - start) / 2);
+    ctx.rotate(midAngle);
     ctx.textAlign = "right";
-    ctx.fillStyle = "#FFD700";
+    ctx.fillStyle = "#fff";
     ctx.font = "16px Arial";
-    ctx.fillText(movies[i], radius - 12, 5);
+    ctx.fillText(movies[i], radius - 10, 5);
     ctx.restore();
   }
+
+  ctx.restore(); // Restore canvas origin
 }
+
 
 
     function addMovie() {
