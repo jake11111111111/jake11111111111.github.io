@@ -44,7 +44,7 @@
 
 
 
-<a href="movieSpinner/index.html.txt">Visit Example Website</a>
+<a href="movieSpinner/index.html">Visit Example Website</a>
 
 <!-- Image object -->
 <div style="text-align: center;">
