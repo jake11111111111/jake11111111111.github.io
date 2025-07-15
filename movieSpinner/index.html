@@ -73,51 +73,56 @@
     let selectedIndex = -1;
 
     function drawWheel() {
-      const total = movies.length;
-      const radius = canvas.width / 2;
+  const total = movies.length;
+  const radius = canvas.width / 2;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Full canvas clear
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any transforms
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (total === 0) {
-        ctx.font = "20px Arial";
-        ctx.textAlign = "center";
-        ctx.fillStyle = "#a5fc03"; //change this
-        ctx.fillText("Add some movies!", radius, radius);
-        return;
-      }
+  if (total === 0) {
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#a5fc03";
+    ctx.fillText("Add some movies!", radius, radius);
+    return;
+  }
 
-      for (let i = 0; i < total; i++) {
-        const start = angle + (i * 2 * Math.PI) / total;
-        const end = angle + ((i + 1) * 2 * Math.PI) / total;
+  for (let i = 0; i < total; i++) {
+    const start = angle + (i * 2 * Math.PI) / total;
+    const end = angle + ((i + 1) * 2 * Math.PI) / total;
 
-        ctx.beginPath();
-        ctx.moveTo(radius, radius);
-        ctx.arc(radius, radius, radius, start, end);
-        ctx.closePath();
+    ctx.beginPath();
+    ctx.moveTo(radius, radius);
+    ctx.arc(radius, radius, radius - 2, start, end); // Shrink radius slightly
+    ctx.closePath();
 
-        if (i === selectedIndex) {
-          ctx.fillStyle = "#FFD700";
-          ctx.strokeStyle = "#222";
-          ctx.lineWidth = 4;
-        } else {
-          ctx.fillStyle = `hsl(${(i * 360) / total}, 70%, 60%)`;
-          ctx.strokeStyle = "#fff";
-          ctx.lineWidth = 1;
-        }
-
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.save();
-        ctx.translate(radius, radius);
-        ctx.rotate(start + (end - start) / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#FFD700";              //change THIS
-        ctx.font = "16px Arial";
-        ctx.fillText(movies[i], radius - 10, 5);
-        ctx.restore();
-      }
+    // Fill and stroke styles
+    if (i === selectedIndex && !spinning) {
+      ctx.fillStyle = "#FFD700";
+      ctx.strokeStyle = "#000"; // Make stroke match background to reduce visual pop
+      ctx.lineWidth = 2;
+    } else {
+      ctx.fillStyle = `hsl(${(i * 360) / total}, 70%, 60%)`;
+      ctx.strokeStyle = "transparent"; // Remove stroke to prevent "circle"
+      ctx.lineWidth = 0;
     }
+
+    ctx.fill();
+    if (ctx.lineWidth > 0) ctx.stroke();
+
+    // Draw text
+    ctx.save();
+    ctx.translate(radius, radius);
+    ctx.rotate(start + (end - start) / 2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#FFD700";
+    ctx.font = "16px Arial";
+    ctx.fillText(movies[i], radius - 12, 5);
+    ctx.restore();
+  }
+}
+
 
     function addMovie() {
       const input = document.getElementById("movieInput");
