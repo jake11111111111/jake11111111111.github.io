@@ -162,36 +162,37 @@
     }
 
     function spinWheel() {
-      if (spinning || movies.length === 0) return;
-      spinning = true;
+  if (spinning || movies.length === 0) return;
+  spinning = true;
 
-      let spinAngle = Math.random() * 360 + 720; // 2 to 4 spins
-      let current = 0;
-      const spinSpeed = 5;
+  let spinAngle = Math.random() * 360 + 720; // 2 to 4 spins
+  let current = 0;
+  const spinSpeed = 5;
 
-      const interval = setInterval(() => {
-        current += spinSpeed;
-        angle += (spinSpeed * Math.PI) / 180;
-        drawWheel();
-        spinSound.currentTime = 0;
-        spinSound.play();
+  const interval = setInterval(() => {
+    current += spinSpeed;
+    angle += (spinSpeed * Math.PI) / 180;
+    drawWheel();
+    spinSound.currentTime = 0;
+    spinSound.play();
 
-        if (current >= spinAngle) {
-          clearInterval(interval);
-          angle = angle % (2 * Math.PI);
-          selectedIndex = Math.floor(
-            ((2 * Math.PI - angle) % (2 * Math.PI)) / ((2 * Math.PI) / movies.length)
-          );
-          const selected = movies[selectedIndex];
-          document.getElementById(
-            "selectedMovie"
-          ).innerText = `🎉 Selected: ${selected}`;
-          drawWheel();
-          launchConfetti();
-          spinning = false;
-        }
-      }, 30);
+    if (current >= spinAngle) {
+      clearInterval(interval);
+      angle = angle % (2 * Math.PI);
+      selectedIndex = Math.floor(
+        ((2 * Math.PI - angle) % (2 * Math.PI)) / ((2 * Math.PI) / movies.length)
+      );
+      const selected = movies[selectedIndex];
+      document.getElementById(
+        "selectedMovie"
+      ).innerText = `🎉 Selected: ${selected}`;
+      drawWheel();
+      launchConfetti();
+      spinning = false;  // <-- make sure this line exists here!
     }
+  }, 30);
+}
+
 
     function launchConfetti() {
       confetti({
