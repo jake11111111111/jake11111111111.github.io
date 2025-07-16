@@ -27,6 +27,7 @@
     <div id="projects" class="tab-content">
         <h2>Projects</h2>
         <p>This is the about tab content.</p>
+        <a href="tic-tac-toe-online/index.html">Tic-Tac-Toe Website</a>
     </div>
 
 <!-- contact tab -->
