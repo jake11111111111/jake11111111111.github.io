@@ -1,74 +1,724 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Online Tic Tac Toe</title>
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tic Tac Toe Variants</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; }
-    .board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; margin-top: 20px; }
-    .cell { width: 100px; height: 100px; font-size: 2.5rem; text-align: center; line-height: 100px; border: 1px solid #000; cursor: pointer; }
-    .cell.x { background: red; color: white; }
-    .cell.o { background: blue; color: white; }
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      color: #1f2937;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    body.dark {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-button {
+      padding: 10px 24px;
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+    .tab-button:hover {
+      background: #e2e8f0;
+    }
+    .tab-button.active {
+      border-color: #3b82f6;
+      background: #bfdbfe;
+      color: #1e40af;
+      box-shadow: 0 4px 8px rgba(59,130,246,0.3);
+    }
+    body.dark .tab-button {
+      background: #222;
+      color: #ccc;
+      box-shadow: none;
+    }
+    body.dark .tab-button:hover {
+      background: #333;
+    }
+    body.dark .tab-button.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: white;
+      box-shadow: 0 4px 8px rgba(37,99,235,0.7);
+    }
+    .variant {
+      display: none;
+      width: 100%;
+      max-width: 680px;
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .variant.active {
+      display: block;
+    }
+    body.dark .variant {
+      background: #1f2937;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+      color: #e0e0e0;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      user-select: none;
+      line-height: 1;
+    }
+    .cell.x {
+      background: #ef4444; /* red-500 */
+      box-shadow: 0 0 10px #f87171;
+    }
+    .cell.o {
+      background: #3b82f6; /* blue-500 */
+      box-shadow: 0 0 10px #60a5fa;
+    }
+    .cell:hover:not(.x):not(.o) {
+      background: #cbd5e1;
+    }
+    body.dark .cell:hover:not(.x):not(.o) {
+      background: #374151;
+    }
+    .status {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 16px;
+      text-align: center;
+      color: #334155;
+      min-height: 1.4em;
+      transition: color 0.4s ease;
+    }
+    body.dark .status {
+      color: #cbd5e1;
+    }
+    /* Ultimate Tic Tac Toe Styles */
+    #board-ultimate {
+      display: grid;
+      grid-template-columns: repeat(3, 204px);
+      gap: 14px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .ultimate-board {
+      background: #f1f5f9;
+      padding: 6px; /* fixed from 5px for better border alignment */
+      display: grid;
+      grid-template-columns: repeat(3, 64px);
+      gap: 5px;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: border-color 0.3s ease, opacity 0.3s ease;
+      cursor: default;
+      position: relative;
+      /* add relative for better border alignment */
+    }
+    .ultimate-board.won-x {
+      background: rgba(239, 68, 68, 0.25);
+      box-shadow: 0 0 15px #f87171;
+    }
+    .ultimate-board.won-o {
+      background: rgba(59, 130, 246, 0.25);
+      box-shadow: 0 0 15px #60a5fa;
+    }
+    .ultimate-board.active-board {
+      border: 4px solid #22c55e;
+      box-sizing: border-box;
+    }
+    .ultimate-board.inactive-board {
+      opacity: 0.4;
+    }
+    .ultimate-cell {
+      width: 64px;
+      height: 64px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      line-height: 1;
+    }
+    .ultimate-cell.x {
+      background: #ef4444;
+      color: white;
+      box-shadow: 0 0 12px #f87171;
+    }
+    .ultimate-cell.o {
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 0 12px #60a5fa;
+    }
+    /* Controls container */
+    .controls {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    select, button {
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    select {
+      background: white;
+      color: #334155;
+    }
+    select:hover {
+      background: #e2e8f0;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    body.dark select {
+      background: #2d3748;
+      color: #cbd5e1;
+      box-shadow: none;
+    }
+    body.dark select:hover {
+      background: #4a5568;
+    }
+    body.dark button {
+      background: #2563eb;
+      box-shadow: none;
+    }
+    body.dark button:hover {
+      background: #1e40af;
+    }
+    /* Dark mode toggle */
+    #dark-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 24px;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(59,130,246,0.6);
+      transition: background-color 0.3s ease;
+      user-select: none;
+      z-index: 100;
+    }
+    #dark-toggle:hover {
+      background: #2563eb;
+    }
   </style>
 </head>
 <body>
-  <h1>Online Tic Tac Toe</h1>
-  <p id="status">Connecting...</p>
-  <div class="board" id="board"></div>
+  <button id="dark-toggle">Toggle Dark Mode</button>
+  <h1>Tic Tac Toe Variants</h1>
+
+  <div class="tabs">
+    <button class="tab-button active" onclick="switchTab('classic')">Classic</button>
+    <button class="tab-button" onclick="switchTab('misere')">Misère</button>
+    <button class="tab-button" onclick="switchTab('random')">Random Start</button>
+    <button class="tab-button" onclick="switchTab('ultimate')">Ultimate</button>
+  </div>
+
+  <!-- Classic Variant -->
+  <div id="classic" class="variant active">
+    <div class="status" id="status-classic">X's turn</div>
+    <div class="board" id="board-classic"></div>
+    <div class="controls">
+      <button onclick="initClassic()">Reset</button>
+      <button onclick="toggleAI('classic')">Toggle AI</button>
+    </div>
+  </div>
+
+  <!-- Misere Variant -->
+  <div id="misere" class="variant">
+    <div class="status" id="status-misere">X's turn</div>
+    <div class="board" id="board-misere"></div>
+    <div class="controls">
+      <button onclick="initMisere()">Reset</button>
+      <button onclick="toggleAI('misere')">Toggle AI</button>
+    </div>
+  </div>
+
+  <!-- Random Variant -->
+  <div id="random" class="variant">
+    <div class="status" id="status-random">X's turn</div>
+    <div class="board" id="board-random"></div>
+    <div class="controls">
+      <button onclick="initRandom()">Reset</button>
+      <button onclick="toggleAI('random')">Toggle AI</button>
+    </div>
+  </div>
+
+  <!-- Ultimate Variant -->
+  <div id="ultimate" class="variant">
+    <div class="status" id="status-ultimate">X's turn</div>
+    <div id="board-ultimate"></div>
+    <div class="controls">
+      <button onclick="initUltimate()">Reset</button>
+      <label for="ultimate-difficulty">AI Difficulty:</label>
+      <select id="ultimate-difficulty" onchange="setUltimateDifficulty(this.value)">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button onclick="toggleAI('ultimate')">Toggle AI</button>
+    </div>
+  </div>
 
   <script>
-    const socket = io("http://localhost:3000"); // Replace with deployed server URL
-    const board = document.getElementById('board');
-    const status = document.getElementById('status');
-    const cells = [];
-    let mySymbol = null;
-    let isMyTurn = false;
+    const variants = ['classic', 'misere', 'random', 'ultimate'];
+    let aiEnabled = {classic:false, misere:false, random:false, ultimate:true};
+    let ultimateDifficulty = 'medium';
 
-    for (let i = 0; i < 9; i++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      cell.dataset.index = i;
-      board.appendChild(cell);
-      cells.push(cell);
-      cell.addEventListener('click', () => {
-        if (!isMyTurn || cell.textContent !== '') return;
-        socket.emit('move', i);
+    // Common utilities & winner lines
+    const wins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    // Switch Tabs
+    function switchTab(id) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // Add active class to the clicked button
+      const btns = document.querySelectorAll('.tab-button');
+      btns.forEach(btn => {
+        if(btn.getAttribute('onclick').includes(id)) {
+          btn.classList.add('active');
+        }
       });
+
+      // Initialize the board for the selected tab
+      if(id === 'classic') initClassic();
+      else if(id === 'misere') initMisere();
+      else if(id === 'random') initRandom();
+      else if(id === 'ultimate') initUltimate();
     }
 
-    socket.emit("join-lobby");
+    // AI Toggle
+    function toggleAI(mode) {
+      aiEnabled[mode] = !aiEnabled[mode];
+      alert(`${mode} AI is now ${aiEnabled[mode] ? 'ON' : 'OFF'}`);
+      if(mode === 'classic') initClassic();
+      else if(mode === 'misere') initMisere();
+      else if(mode === 'random') initRandom();
+      else if(mode === 'ultimate') initUltimate();
+    }
 
-    socket.on('init', symbol => {
-      mySymbol = symbol;
-      status.textContent = `You are ${symbol}. Waiting for opponent...`;
+    // --- Classic Variant ---
+    function initClassic() {
+      const board = document.getElementById('board-classic');
+      const status = document.getElementById('status-classic');
+      let currentPlayer = 'X';
+      let gameEnded = false;
+
+      board.innerHTML = '';
+      status.textContent = `${currentPlayer}'s turn`;
+
+      for(let i=0; i<9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        board.appendChild(cell);
+        cell.addEventListener('click', () => {
+          if(gameEnded || cell.textContent !== '') return;
+          cell.textContent = currentPlayer;
+          cell.classList.add(currentPlayer.toLowerCase());
+          if(checkWinner(Array.from(board.children), currentPlayer)) {
+            status.textContent = `${currentPlayer} wins!`;
+            gameEnded = true;
+            return;
+          }
+          if([...board.children].every(c => c.textContent !== '')) {
+            status.textContent = "It's a draw!";
+            gameEnded = true;
+            return;
+          }
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          status.textContent = `${currentPlayer}'s turn`;
+
+          if(aiEnabled.classic && currentPlayer === 'O' && !gameEnded) {
+            setTimeout(() => aiMoveClassic(board, status, () => gameEnded = true), 400);
+          }
+        });
+      }
+    }
+    function aiMoveClassic(board, status, endGameCallback) {
+      let available = [...board.children].filter(c => c.textContent==='');
+      if(available.length === 0) return;
+      // Simple random AI for demo
+      const choice = available[Math.floor(Math.random()*available.length)];
+      choice.click();
+    }
+
+    // --- Misere Variant ---
+    function initMisere() {
+      const board = document.getElementById('board-misere');
+      const status = document.getElementById('status-misere');
+      let currentPlayer = 'X';
+      let gameEnded = false;
+
+      board.innerHTML = '';
+      status.textContent = `${currentPlayer}'s turn`;
+
+      for(let i=0; i<9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        board.appendChild(cell);
+        cell.addEventListener('click', () => {
+          if(gameEnded || cell.textContent !== '') return;
+          cell.textContent = currentPlayer;
+          cell.classList.add(currentPlayer.toLowerCase());
+          if(checkWinner(Array.from(board.children), currentPlayer)) {
+            status.textContent = `${currentPlayer} loses! (Misère rules)`;
+            gameEnded = true;
+            return;
+          }
+          if([...board.children].every(c => c.textContent !== '')) {
+            status.textContent = "It's a draw!";
+            gameEnded = true;
+            return;
+          }
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          status.textContent = `${currentPlayer}'s turn`;
+
+          if(aiEnabled.misere && currentPlayer === 'O' && !gameEnded) {
+            setTimeout(() => aiMoveMisere(board, status, () => gameEnded = true), 400);
+          }
+        });
+      }
+    }
+    function aiMoveMisere(board, status, endGameCallback) {
+      let available = [...board.children].filter(c => c.textContent==='');
+      if(available.length === 0) return;
+      const choice = available[Math.floor(Math.random()*available.length)];
+      choice.click();
+    }
+
+    // --- Random Start Variant ---
+    function initRandom() {
+      const board = document.getElementById('board-random');
+      const status = document.getElementById('status-random');
+      let currentPlayer = 'X';
+      let gameEnded = false;
+
+      board.innerHTML = '';
+      status.textContent = `${currentPlayer}'s turn`;
+
+      for(let i=0; i<9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        board.appendChild(cell);
+        cell.addEventListener('click', () => {
+          if(gameEnded || cell.textContent !== '') return;
+          cell.textContent = currentPlayer;
+          cell.classList.add(currentPlayer.toLowerCase());
+          if(checkWinner(Array.from(board.children), currentPlayer)) {
+            status.textContent = `${currentPlayer} wins!`;
+            gameEnded = true;
+            return;
+          }
+          if([...board.children].every(c => c.textContent !== '')) {
+            status.textContent = "It's a draw!";
+            gameEnded = true;
+            return;
+          }
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          status.textContent = `${currentPlayer}'s turn`;
+
+          if(aiEnabled.random && currentPlayer === 'O' && !gameEnded) {
+            setTimeout(() => aiMoveRandom(board, status, () => gameEnded = true), 400);
+          }
+        });
+      }
+      // Place a random initial move on board to start
+      let randomIndex = Math.floor(Math.random() * 9);
+      board.children[randomIndex].click();
+    }
+    function aiMoveRandom(board, status, endGameCallback) {
+      let available = [...board.children].filter(c => c.textContent==='');
+      if(available.length === 0) return;
+      const choice = available[Math.floor(Math.random()*available.length)];
+      choice.click();
+    }
+
+    // --- Ultimate Tic Tac Toe Variant ---
+    let ultimateGameState = {
+      boards: [], // Array of 9 boards, each 9 cells (''/'X'/'O')
+      boardWinners: Array(9).fill(''), // 'X', 'O', or ''
+      currentPlayer: 'X',
+      nextBoardIndex: -1,
+      gameEnded: false
+    };
+
+    function initUltimate() {
+      const container = document.getElementById('board-ultimate');
+      const status = document.getElementById('status-ultimate');
+      container.innerHTML = '';
+      status.textContent = `${ultimateGameState.currentPlayer}'s turn`;
+      ultimateGameState = {
+        boards: Array(9).fill(null).map(() => Array(9).fill('')),
+        boardWinners: Array(9).fill(''),
+        currentPlayer: 'X',
+        nextBoardIndex: -1,
+        gameEnded: false
+      };
+
+      for(let i=0; i<9; i++) {
+        const subBoard = document.createElement('div');
+        subBoard.classList.add('ultimate-board');
+        subBoard.dataset.index = i;
+
+        for(let j=0; j<9; j++) {
+          const cell = document.createElement('div');
+          cell.classList.add('ultimate-cell');
+          cell.dataset.sub = i;
+          cell.dataset.cell = j;
+          subBoard.appendChild(cell);
+          cell.addEventListener('click', () => ultimateCellClicked(i, j));
+        }
+        container.appendChild(subBoard);
+      }
+      highlightBoards();
+      updateUltimateStatus();
+    }
+
+    function ultimateCellClicked(boardIndex, cellIndex) {
+      if(ultimateGameState.gameEnded) return;
+      if(ultimateGameState.nextBoardIndex !== -1 && ultimateGameState.nextBoardIndex !== boardIndex) return;
+
+      if(ultimateGameState.boards[boardIndex][cellIndex] !== '') return;
+
+      if(ultimateGameState.boardWinners[boardIndex] !== '') return;
+
+      // Mark move
+      ultimateGameState.boards[boardIndex][cellIndex] = ultimateGameState.currentPlayer;
+
+      // Update UI
+      updateUltimateUI();
+
+      // Check sub-board winner
+      if(checkWinnerUltimate(ultimateGameState.boards[boardIndex], ultimateGameState.currentPlayer)) {
+        ultimateGameState.boardWinners[boardIndex] = ultimateGameState.currentPlayer;
+      } else if(ultimateGameState.boards[boardIndex].every(c => c !== '')) {
+        ultimateGameState.boardWinners[boardIndex] = 'D'; // Draw
+      }
+
+      // Check overall winner
+      if(checkWinnerUltimate(ultimateGameState.boardWinners, ultimateGameState.currentPlayer)) {
+        ultimateGameState.gameEnded = true;
+        document.getElementById('status-ultimate').textContent = `${ultimateGameState.currentPlayer} wins the game!`;
+        highlightBoards(true);
+        return;
+      }
+
+      // Check overall draw
+      if(ultimateGameState.boardWinners.every(w => w !== '')) {
+        ultimateGameState.gameEnded = true;
+        document.getElementById('status-ultimate').textContent = "It's a draw!";
+        highlightBoards(true);
+        return;
+      }
+
+      // Switch player
+      ultimateGameState.currentPlayer = ultimateGameState.currentPlayer === 'X' ? 'O' : 'X';
+
+      // Set next board
+      if(ultimateGameState.boardWinners[cellIndex] === '') {
+        ultimateGameState.nextBoardIndex = cellIndex;
+      } else {
+        ultimateGameState.nextBoardIndex = -1; // Any board
+      }
+
+      updateUltimateStatus();
+      highlightBoards();
+
+      // AI move
+      if(aiEnabled.ultimate && ultimateGameState.currentPlayer === 'O' && !ultimateGameState.gameEnded) {
+        setTimeout(ultimateAIMove, 300);
+      }
+    }
+
+    function updateUltimateUI() {
+      const container = document.getElementById('board-ultimate');
+      for(let i=0; i<9; i++) {
+        const subBoard = container.children[i];
+        subBoard.classList.remove('won-x','won-o');
+        if(ultimateGameState.boardWinners[i] === 'X') subBoard.classList.add('won-x');
+        else if(ultimateGameState.boardWinners[i] === 'O') subBoard.classList.add('won-o');
+
+        for(let j=0; j<9; j++) {
+          const cell = subBoard.children[j];
+          const val = ultimateGameState.boards[i][j];
+          cell.textContent = val;
+          cell.classList.remove('x','o');
+          if(val === 'X') cell.classList.add('x');
+          else if(val === 'O') cell.classList.add('o');
+        }
+      }
+    }
+
+    function highlightBoards(final=false) {
+      const container = document.getElementById('board-ultimate');
+      for(let i=0; i<9; i++) {
+        const subBoard = container.children[i];
+        subBoard.classList.remove('active-board','inactive-board');
+        if(final) {
+          subBoard.classList.remove('inactive-board');
+          subBoard.classList.add('active-board');
+          continue;
+        }
+        if(ultimateGameState.nextBoardIndex === -1) {
+          if(ultimateGameState.boardWinners[i] === '') {
+            subBoard.classList.add('active-board');
+          } else {
+            subBoard.classList.add('inactive-board');
+          }
+        } else {
+          if(i === ultimateGameState.nextBoardIndex) {
+            subBoard.classList.add('active-board');
+          } else {
+            subBoard.classList.add('inactive-board');
+          }
+        }
+      }
+    }
+
+    function updateUltimateStatus() {
+      if(!ultimateGameState.gameEnded) {
+        document.getElementById('status-ultimate').textContent = `${ultimateGameState.currentPlayer}'s turn`;
+      }
+    }
+
+    // Ultimate AI - simple random AI for demo
+    function ultimateAIMove() {
+      if(ultimateGameState.gameEnded) return;
+
+      let targetBoards = [];
+      if(ultimateGameState.nextBoardIndex === -1) {
+        // Any unfinished boards
+        for(let i=0; i<9; i++) {
+          if(ultimateGameState.boardWinners[i] === '') targetBoards.push(i);
+        }
+      } else {
+        if(ultimateGameState.boardWinners[ultimateGameState.nextBoardIndex] === '') {
+          targetBoards = [ultimateGameState.nextBoardIndex];
+        } else {
+          for(let i=0; i<9; i++) {
+            if(ultimateGameState.boardWinners[i] === '') targetBoards.push(i);
+          }
+        }
+      }
+
+      // Collect all empty cells in target boards
+      let options = [];
+      for(let b of targetBoards) {
+        for(let c=0; c<9; c++) {
+          if(ultimateGameState.boards[b][c] === '') {
+            options.push({board: b, cell: c});
+          }
+        }
+      }
+
+      if(options.length === 0) return;
+
+      // For simplicity, pick random
+      const choice = options[Math.floor(Math.random()*options.length)];
+      ultimateCellClicked(choice.board, choice.cell);
+    }
+
+    // Utility to check winner (classic)
+    function checkWinner(cells, player) {
+      return wins.some(line => line.every(i => cells[i].textContent === player));
+    }
+
+    // Utility for Ultimate boards (arrays of strings)
+    function checkWinnerUltimate(arr, player) {
+      return wins.some(line => line.every(i => arr[i] === player));
+    }
+
+    function setUltimateDifficulty(level) {
+      ultimateDifficulty = level;
+      alert(`Ultimate AI difficulty set to ${level}`);
+    }
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById('dark-toggle');
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
     });
 
-    socket.on('turn', ({ index, symbol }) => {
-      cells[index].textContent = symbol;
-      cells[index].classList.add(symbol.toLowerCase());
-    });
+    // Initialize default variant
+    initClassic();
 
-    socket.on('your-turn', () => {
-      isMyTurn = true;
-      status.textContent = `Your turn (${mySymbol})`;
-    });
-
-    socket.on('wait-turn', () => {
-      isMyTurn = false;
-      status.textContent = `Opponent's turn...`;
-    });
-
-    socket.on('game-over', result => {
-      status.textContent = result;
-      isMyTurn = false;
-    });
-
-    socket.on('opponent-disconnected', () => {
-      status.textContent = 'Opponent disconnected. Waiting...';
-    });
   </script>
 </body>
 </html>
