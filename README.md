@@ -1,3 +1,4 @@
+
 <!--DOCTYPE html-->
 <html lang="en">
 <head>
@@ -8,13 +9,12 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
-
-  <!-- Loader -->
   <div id="loader">
     <div class="spinner"></div>
   </div>
 
-  <!-- Navigation Tab Bar -->
+  <canvas id="bgCanvas"></canvas>
+
   <header>
     <nav class="navbar">
       <div class="logo">NeoCyber</div>
@@ -27,18 +27,15 @@
     </nav>
   </header>
 
-  <!-- Hero -->
   <section class="hero parallax">
     <h1 data-aos="fade-down">Explore the Future</h1>
     <p data-aos="fade-up">Designing sleek, reactive web experiences.</p>
   </section>
 
-  <!-- SVG Divider -->
   <svg class="divider" viewBox="0 0 1440 100">
-    <path fill="#0d0d12" fill-opacity="1" d="M0,0 C720,100 720,0 1440,100 L1440,0 L0,0 Z"></path>
+    <path fill="#0d0d12" d="M0,0 C720,100 720,0 1440,100 L1440,0 L0,0 Z"></path>
   </svg>
 
-  <!-- About -->
   <section id="about" class="section" data-aos="fade-right">
     <h2>About Me</h2>
     <p>I fuse creativity with code to deliver futuristic web interfaces.</p>
@@ -48,7 +45,6 @@
     <path fill="#0d0d12" d="M0,0 C720,100 720,0 1440,100 L1440,0 L0,0 Z"></path>
   </svg>
 
-  <!-- Projects -->
   <section id="projects" class="section" data-aos="zoom-in">
     <h2>My Projects</h2>
     <div class="project-gallery">
@@ -62,13 +58,13 @@
     <path fill="#0d0d12" d="M0,0 C720,100 720,0 1440,100 L1440,0 L0,0 Z"></path>
   </svg>
 
-  <!-- Contact -->
   <section id="contact" class="section" data-aos="fade-left">
     <h2>Contact</h2>
-    <form class="contact-form">
-      <input type="text" placeholder="Name" required />
-      <input type="email" placeholder="Email" required />
-      <textarea placeholder="Message" required></textarea>
+    <form class="contact-form" name="contact" method="POST" data-netlify="true">
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="name" placeholder="Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <textarea name="message" placeholder="Message" required></textarea>
       <button type="submit">Send Message</button>
     </form>
   </section>
@@ -77,7 +73,6 @@
     <p>&copy; 2025 NeoCyber. Built with creativity & code.</p>
   </footer>
 
-  <!-- Modal -->
   <div class="modal" id="projectModal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -85,19 +80,20 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init();
     window.addEventListener("load", () => {
       document.getElementById("loader").style.display = "none";
     });
+
     function toggleMenu() {
       document.getElementById("nav-links").classList.toggle("active");
     }
     function closeMenu() {
       document.getElementById("nav-links").classList.remove("active");
     }
+
     const modal = document.getElementById("projectModal");
     const modalText = document.getElementById("modalText");
     const projectData = {
@@ -112,6 +108,44 @@
     function closeModal() {
       modal.style.display = "none";
     }
+
+    // Starry background animation
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < 100; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5,
+        d: Math.random() * 0.5 + 0.5,
+      });
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ffe7";
+      stars.forEach((s) => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        s.y += s.d;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
   </script>
 </body>
 </html>
