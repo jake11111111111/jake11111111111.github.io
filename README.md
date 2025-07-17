@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!--DOCTYPE html-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
-<canvas id="bgCanvas"></canvas>
   <div id="loader">
     <div class="spinner"></div>
   </div>
