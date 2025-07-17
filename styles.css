@@ -76,7 +76,7 @@ body {
   line-height: 1.6;
 }
 .nav-links a:hover {
-  background: #00ffe7;
+  background: #69d417;          /* og:  #00ffe7 */
   color: #0d0d12;
 }
 .hamburger {
