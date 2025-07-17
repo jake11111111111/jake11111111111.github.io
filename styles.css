@@ -49,7 +49,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 5rem;                  /*changed this 2 --> 5 */
   background: #1e1e25;
   position: sticky;
   top: 0;
