@@ -48,9 +48,21 @@
   <section id="projects" class="section" data-aos="zoom-in">
     <h2>My Projects</h2>
     <div class="project-gallery">
+
+      <div class="project-card" onclick="window.open('https://jake11111111111.github.io', '_blank')">Future Project</div>
+      <div class="project-card" onclick="window.open('tic-tac-toe-online/index.html', '_blank')">Tic Tac Toe</div>
+      <div class="project-card" onclick="window.open('movieSpinner/index.html', '_blank')">Movie Spinner</div>
+
+
+
+<!-- old stuff -->
+      <!--
       <div class="project-card" onclick="openModal(1)">⚡ Reactive UI</div>
       <div class="project-card" onclick="openModal(2)">🧠 AI Dashboard</div>
       <div class="project-card" onclick="openModal(3)">📲 Mobile UX</div>
+      -->
+
+      
     </div>
   </section>
 
