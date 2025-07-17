@@ -67,7 +67,7 @@ body {
 }
 .nav-links a {
   text-decoration: none;
-  color: #e4e4f0;
+  color: #25ad1c;          /* og: #e4e4f0 */
   font-weight: 600;
   padding: 0.4rem 0.8rem;
   border-radius: 5px;
