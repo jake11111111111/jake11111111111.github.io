@@ -82,7 +82,7 @@
   </section>
 
   <footer>
-    <p>&copy; 2025 NeoCyber. Built with creativity & code.</p>
+    <p>&copy; 2025 Jacob Wood. All rights reserved.</p>
   </footer>
 
   <div class="modal" id="projectModal">
