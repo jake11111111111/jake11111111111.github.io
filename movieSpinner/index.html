@@ -20,7 +20,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 0em;
-      background-color: black;            //CHANGE THIS
+      background-color: black;            /*CHANGE THIS*/
       color: white;
     }
     #container {
@@ -52,16 +52,16 @@
       top: 50%;
       left: 100%; /* position right outside canvas */
       transform: translate(0, -50%);
-      transform: rotate(Math.PI);      //this doesn't work lol
+      transform: rotate(Math.PI);      /*this doesn't work lol*/
     }
     input, button {
       margin: 10px;
       padding: 0.5em;
       font-size: 1em;
-      //font-color: gray
+      /*font-color: gray*/
 
-      //new stuff
-      //works pretty well. This stuff is styling the buttons. Maybe can move it to the css file?
+      /*new stuff*/
+      /*works pretty well. This stuff is styling the buttons. Maybe can move it to the css file?*/
        background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: gray;
     padding: 12px 28px;
@@ -74,7 +74,7 @@
     box-shadow: 0 4px 12px rgba(0, 114, 255, 0.25);
     }
 
-    //more new stuff we'll see if it works properly
+    /*more new stuff we'll see if it works properly*/
     button:hover {
     transform: scale(1.2);
     box-shadow: 0 6px 16px rgba(0, 114, 255, 0.4);
@@ -117,7 +117,7 @@
 
   <!-- footer so no one can steal my code! -->
   <footer>
-    <p>&copy; 2025 Jacob Wood. All rights reserved.</p>
+    <p>&copy; 2025 Jacob Wood. All rights reserved</p>
   </footer>
 
   <script>
@@ -266,7 +266,7 @@
 
     function playConfettiSound() {
       const audio = new Audio('movieSpinner/audio/706118__randomwizkid__echopop.mp3');
-      audio.ply();
+      audio.play();
     }
 
     function launchConfetti() {
