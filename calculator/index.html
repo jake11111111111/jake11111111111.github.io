@@ -28,11 +28,22 @@
       transform: scale(1.02);
     }
 
+
+//to be able to use the Cascadia Code font properly
+@font-face {
+  font-family: 'Cascadia Code';
+  src: url('fonts/CascadiaCode.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
     .display {
+	font-family: 'Cascadia-Code', monospace;
       background: #000;
-      color: #0f0;
-      font-size: 2em;
-      padding: 15px;
+      color: #fff;				/*og: #0f0 */
+      font-size: 2.5em;
+      padding: 10px;
       border-radius: 10px;
       text-align: right;
       margin-bottom: 20px;
@@ -41,12 +52,14 @@
     }
 
     .buttons {
+
       display: grid;
       grid-template-columns: repeat(5, 60px);
       grid-gap: 10px;
     }
 
     .btn {
+font-family: 'Cascadia-Code', monospace;
       padding: 15px;
       font-size: 1.1em;
       border: none;
@@ -86,9 +99,19 @@
       background: crimson;
     }
 
+	.btn.back {
+		background: #d1220a;		/*og: #E34234,#FF4500 */
+	}
+
     .btn.clear:hover {
       background: darkred;
     }
+
+	.btn.back:hover {
+		background: #9c1605;		/*og: #FF2400 */
+	}
+
+
   </style>
 </head>
 <body>
@@ -96,9 +119,9 @@
     <div id="display" class="display">0</div>
     <div class="buttons">
       <button class="btn clear" onclick="clearDisplay()">C</button>
-      <button class="btn" onclick="backspace()">⌫</button>
+      <button class="btn back" onclick="backspace()">⌫</button>
       <button class="btn operator" onclick="smartAppendFunction('sqrt(')">√</button>
-      <button class="btn operator" onclick="powAppendFunction('Math.pow(')">xʲ</button>
+      <button class="btn operator" onclick="powAppendFunction('Math.pow(')">xʸ</button>			<!-- xʲ -->
       <button class="btn operator" onclick="appendOperator('/')">÷</button>
 
       <button class="btn" onclick="appendNumber('7')">7</button>
@@ -124,15 +147,23 @@
       <button class="btn" onclick="appendComma()">,</button>
       <button class="btn operator" onclick="smartAppendFunction('Math.log')">log</button>
       <button class="btn operator" onclick="smartAppendFunction('Math.log(')">ln</button>
-      <button class="btn operator" onclick="smartAppendFunction('Math.exp(')">exp</button>
+      
 	
 
       <button class="btn equal" onclick="calculate()">=</button>
+
+
+	<button class="btn operator" onclick="smartAppendFunction('Math.exp(')">exp</button>
+	<button class="btn operator" onclick="leftParaAppendFunction('(')">(</button>
+	<button class="btn operator" onclick="rightParaAppendFunction(')')">)</button>
+
+
     </div>
   </div>
 
   <script>
 
+	
 	
 
     let display = document.getElementById('display');
@@ -180,8 +211,36 @@ function appendComma() {
     }
 
 
+
+
+	function leftParaAppendFunction(input) {
+		if(currentInput.endsWith('1') || currentInput.endsWith('2') || currentInput.endsWith('3') || currentInput.endsWith('4') || currentInput.endsWith('5') || currentInput.endsWith('6') || currentInput.endsWith('7') || currentInput.endsWith('8') || currentInput.endsWith('9') || currentInput.endsWith('0')) {
+		currentInput += '*' + input;
+		} else {
+			currentInput += input;
+			}
+		updateDisplay();
+	}
+
+
+
+	function rightParaAppendFunction(input) {
+		
+	let countLeftParantheses = (currentInput.match(/\(/g) || []).length;
+	let countRightParantheses = (currentInput.match(/\)/g) || []).length;
+	if(countLeftParantheses > countRightParantheses){
+		currentInput += input;
+	}
+
+
+		updateDisplay();
+
+
+	}
+
+
 ///////////////////////////////////////////////////////////////////
-	//these tow next functions might be a little buggy lol
+	//these two next functions might be a little buggy lol
 	//appends the function to the 
 	function smartAppendFunction(fn) {
 		if(!currentInput.endsWith('+') && !currentInput.endsWith('*') && !currentInput.endsWith('/') && !currentInput.endsWith('-')){
