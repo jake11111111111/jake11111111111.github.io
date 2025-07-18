@@ -115,7 +115,7 @@
 
 
 
-  /* footer so no one can steal my code! */
+  <!-- footer so no one can steal my code! -->
   <footer>
     <p>&copy; 2025 Jacob Wood. All rights reserved.</p>
   </footer>
@@ -128,6 +128,8 @@
     let angle = 0;
     let spinning = false;
     let selectedIndex = -1;
+
+    
 
    function drawWheel() {
   const total = movies.length;
@@ -255,9 +257,16 @@
           ).innerText = `🎉 Selected: ${selected}`;
          //drawWheel();
           //launchConfettiWithSound();
+          playConfettiSound();
+          
           spinning = false;
         }
       }, 20);
+    }
+
+    function playConfettiSound() {
+      const audio = new Audio('movieSpinner/audio/706118__randomwizkid__echopop.mp3');
+      audio.ply();
     }
 
     function launchConfetti() {
