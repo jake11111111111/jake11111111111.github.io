@@ -90,6 +90,17 @@
     transform: scale(0.93);
   }
 
+    /* styling for bouncing String script */
+    #bouncer {
+    position: absolute;
+    font-size: 32px;
+    font-family: 'Arial', sans-serif;
+    user-select: none;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+    will-change: transform;
+  }
+
     
   </style>
 </head>
@@ -297,48 +308,106 @@
 
     //this function does something fun and trollish /:)
     function bounceString(text) {
-  // Create the element
   const bouncer = document.createElement('div');
   bouncer.id = 'bouncer';
   bouncer.textContent = text;
   document.body.appendChild(bouncer);
 
-  // Initial position and speed
   let x = Math.random() * (window.innerWidth - bouncer.offsetWidth);
   let y = Math.random() * (window.innerHeight - bouncer.offsetHeight);
-  let dx = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
-  let dy = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+
+  let dx = (Math.random() * 8 + 5) * (Math.random() < 0.5 ? 1 : -1);
+  let dy = (Math.random() * 8 + 5) * (Math.random() < 0.5 ? 1 : -1);
+
+  let rotation = 0;
+  let rotationSpeed = 0;
+  let spinning = false;
+  let spinDuration = 0;
+
+  // Scale animation variables
+  let scale = 1;
+  let scaleSpeed = (Math.random() * 0.02 + 0.005) * (Math.random() < 0.5 ? 1 : -1);
+  const minScale = 0.5;
+  const maxScale = 1.5;
+
+  function randomColor() {
+    return `hsl(${Math.floor(Math.random() * 360)}, 80%, 60%)`;
+  }
+
+  function onBounce() {
+    dx = (Math.random() * 8 + 5) * (Math.random() < 0.5 ? 1 : -1);
+    dy = (Math.random() * 8 + 5) * (Math.random() < 0.5 ? 1 : -1);
+
+    bouncer.style.color = randomColor();
+
+    if (Math.random() < 0.3) {
+      spinning = true;
+      spinDuration = 60 + Math.floor(Math.random() * 120);
+      rotationSpeed = (Math.random() * 10 + 5) * (Math.random() < 0.5 ? 1 : -1);
+    }
+  }
+
+  onBounce();
 
   function animate() {
     x += dx;
     y += dy;
 
-    // Bounce off left/right edges
+    let bounced = false;
+
     if (x <= 0) {
       x = 0;
       dx = -dx;
-    } else if (x + bouncer.offsetWidth >= window.innerWidth) {
-      x = window.innerWidth - bouncer.offsetWidth;
+      bounced = true;
+    } else if (x + bouncer.offsetWidth * scale >= window.innerWidth) {
+      x = window.innerWidth - bouncer.offsetWidth * scale;
       dx = -dx;
+      bounced = true;
     }
 
-    // Bounce off top/bottom edges
     if (y <= 0) {
       y = 0;
       dy = -dy;
-    } else if (y + bouncer.offsetHeight >= window.innerHeight) {
-      y = window.innerHeight - bouncer.offsetHeight;
+      bounced = true;
+    } else if (y + bouncer.offsetHeight * scale >= window.innerHeight) {
+      y = window.innerHeight - bouncer.offsetHeight * scale;
       dy = -dy;
+      bounced = true;
+    }
+
+    if (bounced) {
+      onBounce();
+    }
+
+    if (spinning) {
+      rotation += rotationSpeed;
+      spinDuration--;
+      if (spinDuration <= 0) {
+        spinning = false;
+        rotation = 0;
+      }
+    }
+
+    // Update scale and reverse direction if out of bounds
+    scale += scaleSpeed;
+    if (scale > maxScale) {
+      scale = maxScale;
+      scaleSpeed = -scaleSpeed;
+    } else if (scale < minScale) {
+      scale = minScale;
+      scaleSpeed = -scaleSpeed;
     }
 
     bouncer.style.left = x + 'px';
     bouncer.style.top = y + 'px';
+    bouncer.style.transform = `rotate(${rotation}deg) scale(${scale.toFixed(2)})`;
 
     requestAnimationFrame(animate);
   }
 
   animate();
 }
+
 
 
 
