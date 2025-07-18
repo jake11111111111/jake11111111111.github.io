@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scientific Calculator</title>
+  <style>
+    body {
+      background: #1e1e2f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background: #2a2a40;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .calculator:hover {
+      transform: scale(1.02);
+    }
+
+    .display {
+      background: #000;
+      color: #0f0;
+      font-size: 2em;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: right;
+      margin-bottom: 20px;
+      min-width: 300px;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      grid-gap: 10px;
+    }
+
+    .btn {
+      padding: 15px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      background: #3b3b5c;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #5f5f9f;
+    }
+
+    .btn.operator {
+      background: #ff5722;
+    }
+
+    .btn.operator:hover {
+      background: #ff7043;
+    }
+
+.btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn.equal {
+      background: #0d47a1;
+      grid-column: span 2;
+    }
+
+    .btn.equal:hover {
+      background: #1976d2;
+    }
+
+    .btn.clear {
+      background: crimson;
+    }
+
+    .btn.clear:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <button class="btn clear" onclick="clearDisplay()">C</button>
+      <button class="btn" onclick="backspace()">⌫</button>
+      <button class="btn operator" onclick="smartAppendFunction('sqrt(')">√</button>
+      <button class="btn operator" onclick="powAppendFunction('Math.pow(')">xʲ</button>
+      <button class="btn operator" onclick="appendOperator('/')">÷</button>
+
+      <button class="btn" onclick="appendNumber('7')">7</button>
+      <button class="btn" onclick="appendNumber('8')">8</button>
+      <button class="btn" onclick="appendNumber('9')">9</button>
+      <button class="btn operator" onclick="appendOperator('*')">×</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.sin(')">sin</button>
+
+      <button class="btn" onclick="appendNumber('4')">4</button>
+      <button class="btn" onclick="appendNumber('5')">5</button>
+      <button class="btn" onclick="appendNumber('6')">6</button>
+      <button class="btn operator" onclick="appendOperator('-')">−</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.cos(')">cos</button>
+
+      <button class="btn" onclick="appendNumber('1')">1</button>
+      <button class="btn" onclick="appendNumber('2')">2</button>
+      <button class="btn" onclick="appendNumber('3')">3</button>
+      <button class="btn operator" onclick="appendOperator('+')">+</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.tan(')">tan</button>
+
+      <button class="btn" onclick="appendNumber('0')">0</button>
+      <button class="btn" onclick="appendDot()">.</button>
+      <button class="btn" onclick="appendComma()">,</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.log')">log</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.log(')">ln</button>
+      <button class="btn operator" onclick="smartAppendFunction('Math.exp(')">exp</button>
+	
+
+      <button class="btn equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+
+	
+
+    let display = document.getElementById('display');
+    let currentInput = '0';
+    let resetNext = false;
+
+    function updateDisplay() {
+      display.textContent = currentInput;
+    }
+
+    function appendNumber(num) {
+      if (currentInput === '0' || resetNext) {
+        currentInput = num;
+        resetNext = false;
+      } else {
+        currentInput += num;
+      }
+      updateDisplay();
+    }
+
+    function appendDot() {
+      if (resetNext) {
+        currentInput = '0.';
+        resetNext = false;
+      } else if (!currentInput.includes('.')) {
+        currentInput += '.';
+      }
+      updateDisplay();
+    }
+
+
+//appends a comma to the String. If a comma already exists, does nothing.
+//also this method is not used. (Currently.) Oops.
+function appendComma() {
+       if (!currentInput.includes(',')) {
+        currentInput += ',';
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      currentInput += op;
+      resetNext = false;
+      updateDisplay();
+    }
+
+
+///////////////////////////////////////////////////////////////////
+	//these tow next functions might be a little buggy lol
+	//appends the function to the 
+	function smartAppendFunction(fn) {
+		if(!currentInput.endsWith('+') && !currentInput.endsWith('*') && !currentInput.endsWith('/') && !currentInput.endsWith('-')){
+			currentInput = fn + currentInput;
+		}	else {
+				currentInput += fn;
+				}
+		resetNext = false;
+		updateDisplay();
+	}
+	
+	function powAppendFunction(fn) {
+		if(!currentInput.endsWith('+') && !currentInput.endsWith('*') && !currentInput.endsWith('/') && !currentInput.endsWith('-')){
+			currentInput = fn + currentInput + ',';
+		}	else {
+				currentInput += fn;
+				}
+		resetNext = false;
+		updateDisplay();
+	}
+//////////////////////////////////////////////////////////////////
+
+		
+
+
+
+    function appendFunction(fn) {
+      currentInput += fn;
+      resetNext = false;
+      updateDisplay();
+    }
+
+
+
+    function clearDisplay() {
+      currentInput = '0';
+      updateDisplay();
+    }
+
+    function backspace() {
+      currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0';
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        const expression = display.textContent;
+        const result = eval(expression + ')'.repeat((expression.match(/\(/g) || []).length - (expression.match(/\)/g) || []).length));
+        display.textContent = result;
+	//currentInput = result;
+	//updateDisplay();
+	currentInput = '' + result;
+	
+      } catch (error) {
+        display.textContent = "Error";
+      }
+    }
+
+
+  </script>
+</body>
+</html>
