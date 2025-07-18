@@ -272,7 +272,9 @@
     }
 
     function playConfettiSound() {
-      const audio = new Audio('movieSpinner/audio/706118__randomwizkid__echopop.mp3');
+      const audio = new Audio('audio/706118__randomwizkid__echopop.mp3');
+      audio.volume = 1;    // max volume
+      audio.muted = false; // unmute
       audio.play();
     }
 
