@@ -93,7 +93,13 @@
     
   </style>
 </head>
+
+
+
+  
 <body>
+
+  <!--HTML chunk ------------------------------------------------------------------>
 
  <!-- <h1>Movie Spinner</h1> -->
   <input type="text" id="movieInput" placeholder="Enter movie name" />
@@ -128,6 +134,9 @@
   </footer>
 
   <script>
+
+//Java Script -------------------------------------------------------------------------------------
+    
     const canvas = document.getElementById("wheel");
     const ctx = canvas.getContext("2d");
     const spinSound = document.getElementById("spinSound");
@@ -265,7 +274,7 @@
          //drawWheel();
           //launchConfettiWithSound();
           playConfettiSound();
-          
+          bounceString(selected);
           spinning = false;
         }
       }, 20);
@@ -285,6 +294,54 @@
         origin: { y: 0.6 },
       });
     }
+
+    //this function does something fun and trollish /:)
+    function bounceString(text) {
+  // Create the element
+  const bouncer = document.createElement('div');
+  bouncer.id = 'bouncer';
+  bouncer.textContent = text;
+  document.body.appendChild(bouncer);
+
+  // Initial position and speed
+  let x = Math.random() * (window.innerWidth - bouncer.offsetWidth);
+  let y = Math.random() * (window.innerHeight - bouncer.offsetHeight);
+  let dx = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+  let dy = (Math.random() * 4 + 2) * (Math.random() < 0.5 ? 1 : -1);
+
+  function animate() {
+    x += dx;
+    y += dy;
+
+    // Bounce off left/right edges
+    if (x <= 0) {
+      x = 0;
+      dx = -dx;
+    } else if (x + bouncer.offsetWidth >= window.innerWidth) {
+      x = window.innerWidth - bouncer.offsetWidth;
+      dx = -dx;
+    }
+
+    // Bounce off top/bottom edges
+    if (y <= 0) {
+      y = 0;
+      dy = -dy;
+    } else if (y + bouncer.offsetHeight >= window.innerHeight) {
+      y = window.innerHeight - bouncer.offsetHeight;
+      dy = -dy;
+    }
+
+    bouncer.style.left = x + 'px';
+    bouncer.style.top = y + 'px';
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+// Example usage:
+bounceString("Bounce me!");
 
     
 //launch confetti with the sound bite
